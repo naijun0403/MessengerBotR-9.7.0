@@ -25,14 +25,15 @@ function onNotificationPosted(notif, sm) {
             || new java.lang.String(String(action.title).toString().toLowerCase()).contains('답장')
         ) {
             let data = notif.getNotification().extras;
-            let sender = data.get('android.messagingUser').getName().toString()
+            let sender = data.get('android.messagingUser').getName().toString();
             let msg = data.get('android.text').toString();
             let room = data.getString('android.subText') || data.getString("android.title")
             let isGroupChat = data.getBoolean('android.isGroupConversation')
             let packageName = notif.getPackageName();
             const replier = new Replier(packageName, action, room, false, scriptName)
             const bitmap = data.get('android.messagingUser').getIcon().getBitmap();
-            const imageDB = new ImageDB(bitmap, bitmap)
+            const imageDB = new ImageDB(bitmap, bitmap);
+            com.xfl.msgbot.application.service.NotificationListener.Companion.setSession(packageName, room, action);
             onMessage.call(this, room, msg, sender, isGroupChat, replier, imageDB, packageName);
         }
     })
